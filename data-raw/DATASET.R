@@ -1,3 +1,4 @@
+source(here::here("R/data_cleaning_swm_finess.R"))
 ## code to prepare `DATASET` dataset goes here
 # Load and process data using package functions
 swm_base <- data_clean_swm_base(
@@ -18,4 +19,4 @@ finess_raw <- data.table::fread(
 
 swm_cleaned_by_finess_sf <- filter_swm_base_by_finess(swm_base, finess_raw)
 
-usethis::use_data(swm_cleaned_by_finess_sf, overwrite = TRUE)
+saveRDS(swm_cleaned_by_finess_sf, file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds"))

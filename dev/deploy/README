@@ -1,4 +1,0 @@
-docker build -f Dockerfile_base --progress=plain -t ccamapp_base .
-docker build -f Dockerfile --progress=plain -t ccamapp:latest .
-docker run -p 3838:3838 ccamapp:latest
-# then go to 127.0.0.1:3838

@@ -47,7 +47,7 @@ mod_filter_open_ccam_server <- function(id, rv, con, dept_sf) {
       )
 
       rv$swm_etablissements_with_selected_ccam <- inner_join(
-        CCAMapp::swm_cleaned_by_finess_sf,
+        readRDS(file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds")),
         select(local_rv$filtered_open_ccam, finessgeo),
         by = c("finess_geographique" = "finessgeo")
       ) %>%

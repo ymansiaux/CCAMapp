@@ -1,9 +1,10 @@
-#' @export
-#' @import readxl
-#' @import dplyr
-#' @import janitor
-#' @import data.table
-#' @import sf
+library(readxl)
+library(dplyr)
+library(janitor)
+library(data.table)
+library(sf)
+library(tidyr)
+
 data_clean_swm_base <- function(path) {
   raw_xl <- read_excel(path) %>%
     clean_names()
@@ -50,11 +51,7 @@ data_clean_swm_base <- function(path) {
   swm_base
 }
 
-#' @export
-#' @import data.table
-#' @import dplyr
-#' @import sf
-#' @import tidyr
+
 data_clean_finess <- function(
   path,
   keep_only_mco_ssr_psy = FALSE,
@@ -113,9 +110,7 @@ data_clean_finess <- function(
   t_finess_4326
 }
 
-#' @export
-#' @import data.table
-#' @import dplyr
+
 filter_swm_base_by_finess <- function(swm_base, t_finess) {
   finess_actifs <- t_finess[
     etat == "ACTUEL" & statut_jur_etat == "O",

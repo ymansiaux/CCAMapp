@@ -84,8 +84,7 @@ mod_ccam_select_server <- function(
 
     observeEvent(search_term(), {
       req(nchar(search_term()) >= 2)
-
-      golem::invoke_js("hideid", ns("ccam_container"))
+      shinyjs::runjs(sprintf('$("%s").hide()', paste0("#", ns("ccam_container"))))
 
       q <- paste0("%", search_term(), "%")
 
@@ -113,7 +112,7 @@ mod_ccam_select_server <- function(
         server = TRUE
       )
 
-      golem::invoke_js("showid", ns("ccam_container"))
+      shinyjs::runjs(sprintf('$("%s").show()', paste0("#", ns("ccam_container"))))
     })
 
     observeEvent(input$ccam, {

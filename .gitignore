@@ -1,4 +1,5 @@
 .Rproj.user
 inst/ccam_dbf/R_ACTE.dbf
+external_data/ccam_dbf/R_ACTE.dbf
 data-raw/data_swm_finess/t-finess.csv
 data-raw/data_swm_finess/Base clients HM sur SMS avec statut et activité.xlsx
