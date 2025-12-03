@@ -74,12 +74,12 @@ server <- function(input, output, session) {
   )
 
   dept_sf <- sf::read_sf(
-    system.file("departements.geojson", package = "CCAMapp")
+    here::here("external_data", "departements.geojson")
   ) %>%
     sf::st_transform(4326)
 
   all_thematics_csv <- list.files(
-    system.file("specialites", package = "CCAMapp"),
+    here::here("external_data", "specialites"),
     full.names = TRUE
   )
 
