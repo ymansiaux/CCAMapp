@@ -18,6 +18,7 @@ Imports:
     golem,
     janitor,
     mapgl,
+    pkgload,
     readxl,
     sf,
     shiny,
