@@ -1,0 +1,29 @@
+---
+title: "Untitled"
+format: html
+---
+
+
+```{r}
+library(shiny)
+library(DBI)
+library(duckdb)
+library(duckplyr)
+
+# ---- Connexion DuckDB ----
+con <- dbConnect(duckdb::duckdb())
+
+# Lecture CSV directement depuis le fichier
+# ccam.csv doit contenir au minimum : code, lib
+dbExecute(con, "CREATE TABLE ccam AS SELECT * FROM read_csv_auto('inst/referentiel_actes.csv');")
+
+?duckplyr::read_csv_duckdb
+a <- read_csv_duckdb("inst/referentiel_actes.csv", options = list(ignore_errors = FALSE,  quote='\"',
+     escape='\"',
+     nullstr=''))
+nrow(a)
+collect(a)
+
+df <- duckplyr::read_csv_duckdb("inst/open_ccam/open_ccam_24.csv", options = list(ignore_errors = FALSE))
+dplyr::collect(df)
+```

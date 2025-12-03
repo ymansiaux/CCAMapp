@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+format: html
+---
+
+
+```{r}
+library(foreign)
+library(data.table)
+library(shapefiles)
+```
+
+# download dbf part 1 here https://www.ameli.fr/accueil-de-la-ccam/telechargement/index.php
+
+```{r}
+referentiel_actes_dbf <- foreign::read.dbf("inst/ccam_dbf/R_ACTE.dbf")
+referentiel_actes_dt <- as.data.table(referentiel_actes_dbf)
+variables_to_keep <- c("COD_ACTE", "DT_MODIF", "NOM_COURT")
+referentiel_actes_dt <- referentiel_actes_dt[, ..variables_to_keep]
+
+referentiel_actes_dt <- referentiel_actes_dt[order(DT_MODIF, decreasing = TRUE), .SD, by = COD_ACTE]
+
+referentiel_actes_dt <- referentiel_actes_dt[, .SD[1], by = COD_ACTE]
+
+referentiel_actes_dt$NOM_COURT <- iconv(referentiel_actes_dt$NOM_COURT, from = "CP850", to = "latin1")
+
+fwrite(referentiel_actes_dt, "inst/referentiel_actes.csv", encoding = "native")
+
+# a <- duckplyr::read_csv_duckdb("inst/referentiel_actes.csv", options = list(ignore_errors = FALSE))
+# dplyr::collect(a)
+
+
+```
