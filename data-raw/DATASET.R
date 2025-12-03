@@ -19,4 +19,7 @@ finess_raw <- data.table::fread(
 
 swm_cleaned_by_finess_sf <- filter_swm_base_by_finess(swm_base, finess_raw)
 
-saveRDS(swm_cleaned_by_finess_sf, file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds"))
+saveRDS(
+  swm_cleaned_by_finess_sf,
+  file.path(here::here("data"), "swm_cleaned_by_finess_sf.rds")
+)

@@ -6,17 +6,12 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList
+#' @importFrom shiny NS tagList uiOutput renderUI
+#' @importFrom bslib card card_body
 mod_filter_open_ccam_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    h2("Table Open CCAM filtrée par les CCAM sélectionnés"),
-    DTOutput(ns("filtered_open_ccam")),
-    # textOutput(ns("nombre_d_etablissements")),
-    # fluidRow(
-    #   column(6, maplibreOutput(ns("map"))),
-    #   column(6, maplibreOutput(ns("map_by_dept")))
-    # )
+    uiOutput(ns("nombre_d_etablissements"))
   )
 }
 
@@ -62,13 +57,38 @@ mod_filter_open_ccam_server <- function(id, rv, con, dept_sf) {
       )
     })
 
-    # output$nombre_d_etablissements <- renderText({
-    #   req(rv$swm_etablissements_with_selected_ccam)
-    #   paste0(
-    #     "Nombre d'établissements trouvés avec ces codes CCAM: ",
-    #     nrow(rv$swm_etablissements_with_selected_ccam)
-    #   )
-    # })
+    output$nombre_d_etablissements <- renderUI({
+      req(rv$swm_etablissements_with_selected_ccam)
+      n_etablissements <- nrow(rv$swm_etablissements_with_selected_ccam)
+
+      div(
+        style = "display: flex; justify-content: center; margin: 0 auto;",
+        card(
+          class = "mb-3",
+          style = "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; max-width: 600px; width: 100%;",
+          card_body(
+            div(
+              style = "display: flex; align-items: center; gap: 15px;",
+              div(
+                style = "font-size: 3rem; font-weight: bold; line-height: 1;",
+                n_etablissements
+              ),
+              div(
+                style = "flex: 1;",
+                h4(
+                  style = "margin: 0; font-weight: 600;",
+                  "Établissements trouvés"
+                ),
+                p(
+                  style = "margin: 5px 0 0 0; opacity: 0.9; font-size: 0.9rem;",
+                  "avec les codes CCAM sélectionnés"
+                )
+              )
+            )
+          )
+        )
+      )
+    })
 
     # output$map <- renderMaplibre({
     #   req(rv$swm_etablissements_with_selected_ccam)

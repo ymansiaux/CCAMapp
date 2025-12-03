@@ -5,14 +5,11 @@ library(dplyr)
 library(DT)
 library(duckdb)
 library(duckplyr)
-library(golem)
-library(janitor)
 library(mapgl)
-library(pkgload)
-library(readxl)
 library(sf)
 library(tidyr)
 library(shinyjs)
+library(bslib)
 
 R_files <- list.files(here::here("R"), full.names = TRUE)
 for (file in R_files) {
@@ -21,25 +18,37 @@ for (file in R_files) {
 
 
 # Define UI for application that draws a histogram
-ui <-    fluidPage(
+ui <- page_sidebar(
   useShinyjs(),
-      fluidRow(
-        column(6, mod_ccam_select_ui("ccam1")),
-        column(6, DTOutput("out")),
-        column(6, actionButton("erase_selection", "Effacer la sélection"))
-      ),
-      fluidRow(
-        column(6, mod_filter_open_ccam_ui("filter_open_ccam_1"))
-      ),
-      fluidRow(
-        mod_maps_ui("maps_1")
-      )
-    )
+  title = "Exploration actes CCAM",
+  sidebar = sidebar(
+    mod_ccam_select_ui("ccam1")
+  ),
+  tagList(
+    fluidRow(
+      h2("Actes CCAM sélectionnés"),
+      DTOutput("out")
+    ),
+    fluidRow(mod_filter_open_ccam_ui("filter_open_ccam_1")),
+    fluidRow(mod_maps_ui("maps_1"))
+  )
+)
 
+#   fluidRow(
+#     column(6, mod_ccam_select_ui("ccam1")),
+#     column(6, DTOutput("out")),
+#     column(6, actionButton("erase_selection", "Effacer la sélection"))
+#   ),
+#   fluidRow(
+#     column(6, mod_filter_open_ccam_ui("filter_open_ccam_1"))
+#   ),
+#   fluidRow(
+#     mod_maps_ui("maps_1")
+#   )
+# )
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-
   con <- dbConnect(duckdb::duckdb())
 
   referentiel_actes_csv_path <- file.path(
@@ -116,5 +125,5 @@ server <- function(input, output, session) {
   mod_maps_server("maps_1", rv, dept_sf)
 }
 
-# Run the application 
+# Run the application
 shinyApp(ui = ui, server = server)

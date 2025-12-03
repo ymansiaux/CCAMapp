@@ -10,7 +10,6 @@
 mod_maps_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    textOutput(ns("nombre_d_etablissements")),
     fluidRow(
       column(6, maplibreOutput(ns("map"))),
       column(6, maplibreOutput(ns("map_by_dept")))
@@ -24,15 +23,7 @@ mod_maps_ui <- function(id) {
 mod_maps_server <- function(id, rv, dept_sf) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    output$nombre_d_etablissements <- renderText({
-      req(rv$swm_etablissements_with_selected_ccam)
-      paste0(
-        "Nombre d'établissements trouvés avec ces codes CCAM: ",
-        nrow(rv$swm_etablissements_with_selected_ccam)
-      )
-    })
-
+    
     output$map <- renderMaplibre({
       req(rv$swm_etablissements_with_selected_ccam)
 

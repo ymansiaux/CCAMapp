@@ -11,6 +11,8 @@ mod_ccam_select_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
+    actionButton(ns("erase_selection"), "Effacer la sélection", class = "btn-danger"),
+    h4("Recherche d'actes CCAM par code ou libellé"),
     textInput(
       inputId = ns("search"),
       label = "Recherche (code ou libellé)",
@@ -19,9 +21,10 @@ mod_ccam_select_ui <- function(id) {
     div(
       id = ns("ccam_container"),
       style = "display: none;",
+      h5("Faites votre sélection d'actes CCAM"),
       selectizeInput(
         inputId = ns("ccam"),
-        label = "CCAM (max 25 résultats)",
+        label = "Actes CCAM trouvés (max 25 résultats)",
         choices = NULL,
         multiple = TRUE,
         options = list(
@@ -35,6 +38,8 @@ mod_ccam_select_ui <- function(id) {
         label = "Sélectionner tous les résultats proposés"
       )
     ),
+    br(),
+    h4("Vous pouvez également sélectionner des actes par thématique"),
     selectInput(
       inputId = ns("select_ccam_theme"),
       label = "Sélectionner des actes par thématique",
@@ -84,7 +89,10 @@ mod_ccam_select_server <- function(
 
     observeEvent(search_term(), {
       req(nchar(search_term()) >= 2)
-      shinyjs::runjs(sprintf('$("%s").hide()', paste0("#", ns("ccam_container"))))
+      shinyjs::runjs(sprintf(
+        '$("%s").hide()',
+        paste0("#", ns("ccam_container"))
+      ))
 
       q <- paste0("%", search_term(), "%")
 
@@ -112,7 +120,10 @@ mod_ccam_select_server <- function(
         server = TRUE
       )
 
-      shinyjs::runjs(sprintf('$("%s").show()', paste0("#", ns("ccam_container"))))
+      shinyjs::runjs(sprintf(
+        '$("%s").show()',
+        paste0("#", ns("ccam_container"))
+      ))
     })
 
     observeEvent(input$ccam, {
@@ -144,7 +155,26 @@ mod_ccam_select_server <- function(
         )
       }
     })
+    
+  observeEvent(input$erase_selection, {
+    rv$ccam <- NULL
+    rv$filtered_referentiel <- NULL
+    rv$swm_etablissements_with_selected_ccam <- NULL
+
+    updateSelectizeInput(
+      session,
+      "ccam",
+      choices = NULL
+    )
+    updateSelectInput(
+      session,
+      "select_ccam_theme",
+      selected = NULL,
+      choices = NULL
+    )
   })
+  })
+
 }
 
 ## To be copied in the UI
